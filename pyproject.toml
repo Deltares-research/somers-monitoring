@@ -1,6 +1,6 @@
 [project]
 name = "somers"
-version = "0.1.0"
+version = "0.1.1"
 description = "somers"
 authors = [
 			{ name = "Eline Leentvaar", email = "eline.leentvaar@deltares.nl" },
