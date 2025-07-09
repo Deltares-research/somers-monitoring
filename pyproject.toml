@@ -1,0 +1,32 @@
+[project]
+name = "somers"
+version = "0.1.0"
+description = "somers"
+authors = [{ name = "Eline Leentvaar", email = "eline.leentvaar@deltares.nl" }]
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.12"
+pandas = "*"
+geopandas = "*"
+numpy = "*"
+pathlib = "*"
+matplotlib = "*"
+scipy = "*"
+xarray = "*"
+subprocess32 = "*"
+glob2 = "*"
+zarr = "*"
+netcdf4 = "*"
+openpyxl = "*"
+flopy = ">=3.9.3,<4"
+imod = ">=1.0.0rc4,<2"
+psycopg2 = ">=2.9.10,<3"
+
+[tool.pixi.tasks]
+notebook = "jupyter notebook"
