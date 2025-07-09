@@ -2,9 +2,13 @@
 name = "somers"
 version = "0.1.0"
 description = "somers"
-authors = [{ name = "Eline Leentvaar", email = "eline.leentvaar@deltares.nl" }]
+authors = [
+			{ name = "Eline Leentvaar", email = "eline.leentvaar@deltares.nl" },
+			{ name = "Erik van Onselen", email = "erik.vanonselen@deltares.nl" }
+]
 readme = "README.md"
 requires-python = ">=3.12"
+dependencies = ["somers-peatparcel2d-aap @ git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git@main?rev_type=branch"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
@@ -30,3 +34,4 @@ psycopg2 = ">=2.9.10,<3"
 
 [tool.pixi.tasks]
 notebook = "jupyter notebook"
+
