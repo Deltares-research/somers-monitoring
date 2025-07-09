@@ -423,7 +423,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.23.0-py313h536fd9c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
-      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git?branch=main#1229a5e009825b22e21c7d19d86ff2302645ee26
+      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git#1229a5e009825b22e21c7d19d86ff2302645ee26
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/adwaita-icon-theme-48.1-unix_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/affine-2.4.0-pyhd8ed1ab_1.conda
@@ -765,7 +765,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstandard-0.23.0-py313h63b0ddb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
-      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git?branch=main#1229a5e009825b22e21c7d19d86ff2302645ee26
+      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git#1229a5e009825b22e21c7d19d86ff2302645ee26
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/affine-2.4.0-pyhd8ed1ab_1.conda
@@ -1079,7 +1079,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-1.3.1-h2466b09_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstandard-0.23.0-py313ha7868ed_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
-      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git?branch=main#1229a5e009825b22e21c7d19d86ff2302645ee26
+      - pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git#1229a5e009825b22e21c7d19d86ff2302645ee26
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
   sha256: fe51de6107f9edc7aa4f786a70f4a883943bc9d39b3bb7307c04c41410990726
@@ -12094,7 +12094,7 @@ packages:
   - pkg:pypi/snuggs?source=hash-mapping
   size: 11313
   timestamp: 1733818738919
-- pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git?branch=main#1229a5e009825b22e21c7d19d86ff2302645ee26
+- pypi: git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git#1229a5e009825b22e21c7d19d86ff2302645ee26
   name: somers-peatparcel2d-aap
   version: 0.1.0
   requires_python: '>=3.12'

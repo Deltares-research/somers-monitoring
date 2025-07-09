@@ -8,7 +8,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["somers-peatparcel2d-aap @ git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git@main?rev_type=branch"]
+dependencies = ["somers-peatparcel2d-aap @ git+https://github.com/Deltares-research/somers-peatparcel2d-aap.git"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
