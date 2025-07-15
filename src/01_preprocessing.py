@@ -2,27 +2,8 @@ import geopandas as gpd
 import pandas as pd
 import numpy as np
 
-# %% Inputs
-path_parcels = (
-    r"p:\11207812-somers-uitvoering\monitoring_2023\dataverzameling\updaten_AHN5.gpkg"
-)
-#path_parcels = r"p:\11207812-somers-uitvoering\monitoring_2023\shp_files\a_input\a_2023_testerik.shp"
-#parcels_16_tot = gpd.read_file(path_parcels)
-
-# parcels_16_tot = gpd.read_file(
-#     path_parcels, layer="updaten_ahn5__percelen_2016_feb2025", crs=28992
-# )
-# parcels_22_tot =  gpd.read_file(path_parcels, layer='Percelen_2022_feb2025', crs=28992)
-parcels_23_tot =  gpd.read_file(path_parcels, layer='Percelen_2023_feb2025', crs=28992)
-
-# %% Min dekking 10%
-# parcels_16_tot = parcels_16_tot.loc[
-#     (parcels_16_tot["Dekking_Veen"] + (parcels_16_tot["Dekking_Moerig"]) >= 10)
-# ]
-# parcels_22_tot = parcels_22_tot.loc[(parcels_22_tot['Dekking_Veen'] + (parcels_22_tot['Dekking_Moerig']) >= 10)]
-parcels_23_tot = parcels_23_tot.loc[(parcels_23_tot['Dekking_Veen'] + (parcels_23_tot['Dekking_Moerig']) >= 10)]
-
 POSSIBLE_ERRORS = {
+    "is_insufficiently_covered": "Sum of Dekking_Veen and Dekking_Moerig is < 10%; ",
     "is_water": "Type is water; ",
     "is_buried_peat": "Buried peat soil; ",
     "is_petgat": "Archetype is a petgat, AVk; ",
@@ -52,6 +33,7 @@ def create_error_df(parcels_gdf: gpd.GeoDataFrame) -> pd.DataFrame:
         A DataFrame with error flags for each parcel. The DataFrame includes the following columns:
             - Perceel_ID: Identifier of the parcel.
             - geometry: Geometry of the parcel.
+            - is_insufficiently_covered: True if the sum of Dekking_Veen and Dekking_Moerig is less than 10.
             - is_water: True if the parcel type is 'Water'.
             - is_buried_peat: True if the parcel archetype is one of ['Rv01C', 'AEm8', 'Mv41C'].
             - is_petgat: True if the parcel archetype is 'AVk'.
@@ -68,13 +50,14 @@ def create_error_df(parcels_gdf: gpd.GeoDataFrame) -> pd.DataFrame:
     Each error flag column is a boolean indicating whether the corresponding condition is met for each parcel.
     """
     errors = pd.DataFrame(index=parcels_gdf.index)
+    errors["is_insufficiently_covered"] = np.where(
+        (parcels_gdf["Dekking_Veen"] + parcels_gdf["Dekking_Moerig"]) < 10, True, False
+    )
     errors["is_water"] = np.where(parcels_gdf["type"] == "Water", True, False)
     errors["is_buried_peat"] = np.where(
         parcels_gdf["Archetype_Hoofd"].isin(["Rv01C", "AEm8", "Mv41C"]), True, False
     )
-    errors["is_petgat"] = np.where(
-        parcels_gdf["Archetype_Hoofd"] == "AVk", True, False
-    )
+    errors["is_petgat"] = np.where(parcels_gdf["Archetype_Hoofd"] == "AVk", True, False)
     errors["is_invalid_surface_level"] = np.where(
         parcels_gdf["AHN3_Mediaan"].between(-8, 3), False, True
     )
@@ -140,15 +123,16 @@ def filter_parcels(parcels_gdf: gpd.GeoDataFrame, errors: dict) -> gpd.GeoDataFr
     valid_parcels : GeoDataFrame
         A GeoDataFrame containing only the parcels that do not have any errors.
     """
-    # Combine all error columns (those starting with 'is_') to filter out any parcels with errors
     error_columns = [col for col in errors if col.startswith("is_")]
     invalid_mask = errors[error_columns].any(axis=1)
     valid_parcels = parcels_gdf.loc[~invalid_mask]
 
-    invalid_parcels = parcels_gdf.loc[invalid_mask]['Perceel_ID'].copy().to_frame()
+    invalid_parcels = parcels_gdf.loc[invalid_mask]["Perceel_ID"].copy().to_frame()
     invalid_parcels["error_messages"] = ""
     for error_type in POSSIBLE_ERRORS.keys():
-        invalid_parcels.loc[errors[error_type], "error_messages"] += POSSIBLE_ERRORS[error_type]
+        invalid_parcels.loc[errors[error_type], "error_messages"] += POSSIBLE_ERRORS[
+            error_type
+        ]
 
     return valid_parcels, invalid_parcels
 
@@ -163,17 +147,24 @@ def measure_func(SSI_dist, PSSI_dist):
     return measure
 
 
-parcels_23_tot["measure"] = parcels_23_tot.apply(
-    lambda row: measure_func(row["OWD_Drainafstand"], row["DD_Drainafstand"]),
-    axis=1,
-)
-errors = create_error_df(parcels_23_tot)
-valid_parcels, invalid_parcels = filter_parcels(parcels_23_tot, errors)
+if __name__ == "__main__":
+    # Load parcels data
+    path_parcels = r"p:\11207812-somers-uitvoering\monitoring_2023\dataverzameling\updaten_AHN5.gpkg"
+    parcels = gpd.read_file(path_parcels, layer="Percelen_2023_feb2025", crs=28992)
 
-# valid_parcels.to_file(
-#     r"P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/a_2023_testerik_fullset.shp"
-# )
-invalid_parcels.to_csv(
-    r"P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/error_lst_2023_testerik_fullset.csv"
-)
+    # Add measure column (SSI, PSSI, or ref)
+    parcels["measure"] = parcels.apply(
+        lambda row: measure_func(row["OWD_Drainafstand"], row["DD_Drainafstand"]),
+        axis=1,
+    )
 
+    # Get errors
+    errors = create_error_df(parcels)
+    valid_parcels, invalid_parcels = filter_parcels(parcels, errors)
+
+    valid_parcels.to_file(
+        r"P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/a_2023_testerik_fullset.shp"
+    )
+    invalid_parcels.to_csv(
+        r"P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/error_lst_2023_testerik_fullset.csv"
+    )
