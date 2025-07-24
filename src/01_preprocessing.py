@@ -5,14 +5,14 @@ import numpy as np
 #%% Inputs
 path_parcels = r'P:/11207812-somers-uitvoering/monitoring_2023/dataverzameling/updaten_AHN5.gpkg'
 
-parcels_16_tot =  gpd.read_file(path_parcels, layer='Percelen_2016_feb2025', crs=28992)
+# parcels_16_tot =  gpd.read_file(path_parcels, layer='updaten_ahn5__percelen_2016_feb2025', crs=28992)
 parcels_22_tot =  gpd.read_file(path_parcels, layer='Percelen_2022_feb2025', crs=28992)
-parcels_23_tot =  gpd.read_file(path_parcels, layer='Percelen_2023_feb2025', crs=28992)
+# parcels_23_tot =  gpd.read_file(path_parcels, layer='Percelen_2023_feb2025', crs=28992)
 
 #%% Min dekking 10%
-parcels_16_tot = parcels_16_tot.loc[(parcels_16_tot['Dekking_Veen'] + (parcels_16_tot['Dekking_Moerig']) >= 10)]
+# parcels_16_tot = parcels_16_tot.loc[(parcels_16_tot['Dekking_Veen'] + (parcels_16_tot['Dekking_Moerig']) >= 10)]
 parcels_22_tot = parcels_22_tot.loc[(parcels_22_tot['Dekking_Veen'] + (parcels_22_tot['Dekking_Moerig']) >= 10)]
-parcels_23_tot = parcels_23_tot.loc[(parcels_23_tot['Dekking_Veen'] + (parcels_23_tot['Dekking_Moerig']) >= 10)]
+# parcels_23_tot = parcels_23_tot.loc[(parcels_23_tot['Dekking_Veen'] + (parcels_23_tot['Dekking_Moerig']) >= 10)]
 
 #%% Remove water
 def measure_func(SSI_dist, PSSI_dist):
@@ -96,5 +96,5 @@ for n, row in parcels_22_tot.iterrows(): #check what record should be! And check
 valid_rows = parcels_22_tot.loc[~parcels_22_tot['Perceel_ID'].isin(error_lst.index)]
 
 #%% Saving
-valid_rows.to_file(r'P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/a_2022.shp')
-error_lst.to_csv(r'P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/error_lst_2022.csv')
+valid_rows.to_file(r'P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/a_2022_LULUCF.shp')
+error_lst.to_csv(r'P:/11207812-somers-uitvoering/monitoring_2023/shp_files/a_input/error_lst_2022_LULUCF.csv')
